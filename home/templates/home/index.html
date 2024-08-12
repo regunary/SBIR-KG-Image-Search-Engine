@@ -10,6 +10,8 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/js/dropify.min.js" integrity="sha512-8QFTrG0oeOiyWo/VM9Y8kgxdlCryqhIxVeRpWSezdRRAvarxVtwLnGroJgnVW9/XBRduxO/z1GblzPrMQoeuew==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Dropify/0.2.2/css/dropify.min.css" integrity="sha512-EZSUkJWTjzDlspOoPSpUFR0o0Xy7jdzW//6qhUkoZ9c4StFkVsp9fbbd0O06p9ELS3H486m4wmrCELjza4JEog==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
     <div class="container">
@@ -17,38 +19,80 @@
             <h1 style="text-align: center;">SBIR</h1>
             <input type="text" placeholder="Enter image URL here">
             <div class="file-drop-area">
+                <input type="file" id="photo" name="photo" class="dropify">
+            </div>
+            
+
+            <!-- <div class="file-drop-area">
                 <span class="choose-file-button">Choose files</span>
                 <span class="file-message">or drag and drop files here</span>
                 <input class="file-input" type="file" multiple accept="image/*">
                 <div id="preview-container" class="preview-container"></div>
-            </div>
-            <button class="start-button">Start</button>
+            </div> -->
+            <button class="start-button">Search</button>
         </div>
         <div class="main-content">
             <h2>Image Search Engine</h2>
             <div class="image-grid">
-                <div class="image-item"><img src="cat.jpg" alt="Cat on Keyboard"></div>
-                <div class="image-item"><img src="person.jpg" alt="Person with Camera"></div>
-                <div class="image-item"><img src="airplane.jpg" alt="Airplane in Sky"></div>
-                <div class="image-item"><img src="coffee.jpg" alt="Person with Coffee"></div>
+                <div class="image-item"><img src="/media/test2017/000000000463.jpg" alt="Cat on Keyboard"></div>
+                <div class="image-item"><img src="/media/test2017/000000000191.jpg" alt="Person with Camera"></div>
+                <div class="image-item"><img src="/media/test2017/000000000647.jpg" alt="Airplane in Sky"></div>
+                <div class="image-item"><img src="media/test2017/000000000662.jpg" alt="Person with Coffee"></div>
+                <div class="image-item"><img src="media/test2017/000000002680.jpg" alt="Person with Camera"></div>
+                <div class="image-item"><img src="media/test2017/000000003208.jpg" alt="Person with Camera"></div>
+                <div class="image-item"><img src="media/test2017/000000004053.jpg" alt="Person with Camera"></div>
+                <div class="image-item"><img src="media/test2017/000000004536.jpg" alt="Person with Camera"></div>
+                <div class="image-item"><img src="media/test2017/000000007242.jpg" alt="Person with Camera"></div>
+                <div class="image-item"><img src="media/test2017/000000008013.jpg" alt="Person with Camera"></div>
+                <div class="image-item"><img src="media/test2017/000000009255.jpg" alt="Person with Camera"></div>
+                <div class="image-item"><img src="media/test2017/000000009560.jpg" alt="Person with Camera"></div>
+                <div class="image-item"><img src="media/test2017/000000010575.jpg" alt="Person with Camera"></div>
+                <div class="image-item"><img src="media/test2017/000000010616.jpg" alt="Person with Camera"></div>
+                <div class="image-item"><img src="media/test2017/000000010879.jpg" alt="Person with Camera"></div>
+                <div class="image-item"><img src="media/test2017/000000011986.jpg" alt="Person with Camera"></div>
+                <div class="image-item"><img src="media/test2017/000000012355.jpg" alt="Person with Camera"></div>
+                <div class="image-item"><img src="media/test2017/000000013026.jpg" alt="Person with Camera"></div>
+
             </div>
         </div>
     </div>
 </body>
 <script>
-    $(document).on('change', '.file-input', function() {
-        var files = $(this)[0].files;
-        var previewContainer = $('#preview-container');
-        previewContainer.empty(); // Clear previous images
-
-        for (var i = 0; i < files.length; i++) {
-            var reader = new FileReader();
-            reader.onload = function(e) {
-                var img = $('<img>').attr('src', e.target.result).addClass('preview-image');
-                previewContainer.append(img);
+    $(document).ready(function () {
+        // Basic
+        $('.dropify').dropify({
+            messages: {
+                default: 'Kéo thả file hoặc click để chọn ảnh',
+                replace: 'Kéo thả file hoặc click để thay ảnh',
+                remove: 'Xoá',
+                error: 'Đã có lỗi xảy ra'
             }
-            reader.readAsDataURL(files[i]);
-        }
+        });
+        // Used events
+        var drEvent = $('#input-file-events').dropify();
+
+        drEvent.on('dropify.beforeClear', function (event, element) {
+            return confirm("Do you really want to delete \"" + element.file.name + "\" ?");
+        });
+
+        drEvent.on('dropify.afterClear', function (event, element) {
+            alert('File deleted');
+        });
+
+        drEvent.on('dropify.errors', function (event, element) {
+            console.log('Has Errors');
+        });
+
+        var drDestroy = $('#input-file-to-destroy').dropify();
+        drDestroy = drDestroy.data('dropify')
+        $('#toggleDropify').on('click', function (e) {
+            e.preventDefault();
+            if (drDestroy.isDropified()) {
+                drDestroy.destroy();
+            } else {
+                drDestroy.init();
+            }
+        })
     });
 </script>
 </html>
